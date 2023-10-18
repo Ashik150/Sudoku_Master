@@ -22,7 +22,7 @@ public class StartScreen extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String sizeInput = JOptionPane.showInputDialog("Enter the Board Size:");
-                int boardsize=9;
+                int boardsize=4;
                 try{
                     int size = Integer.parseInt(sizeInput);
                     double sqrt = Math.sqrt(size);

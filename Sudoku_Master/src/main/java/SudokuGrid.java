@@ -28,4 +28,6 @@ public class SudokuGrid
     public JPanel getGridPanel() {
         return gridPanel;
     }
+
+    public JTextField getCell(int row,int col){return cells[row][col];}
 }
