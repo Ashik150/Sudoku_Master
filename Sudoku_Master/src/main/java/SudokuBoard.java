@@ -1,0 +1,177 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
+
+public class SudokuBoard extends JFrame {
+    private int boardSize;
+    private SudokuGrid sudokuGrid;
+    private int[][] solvedpuzzle;
+
+    public SudokuBoard(int size) {
+        boardSize = size;
+        sudokuGrid = new SudokuGrid(size);
+        solvedpuzzle = new int[boardSize][boardSize];
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(500, 500));
+        setTitle("Sudoku Master");
+
+        JPanel buttonPanel = new JPanel();
+        JButton solveButton = new JButton("Solution");
+        solveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SudokuSolver sudokuSolver = new SudokuSolver(sudokuGrid);
+                sudokuSolver.solve();
+            }
+        });
+        buttonPanel.add(solveButton);
+
+        JButton checkSolutionButton = new JButton("Check");
+        checkSolutionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean solutionCorrect = isSolutionCorrect(boardSize); // Check solution
+                if (solutionCorrect) {
+                    JOptionPane.showMessageDialog(null, "Congratulations! Solution is correct.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Solution is incorrect. Please check your entries.");
+                }
+            }
+        });
+        buttonPanel.add(checkSolutionButton);
+
+        JButton back = new JButton("Back");
+        back.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                goBackToStartScreen();
+            }
+        });
+        buttonPanel.add(back);
+
+        JButton generatePuzzleButton = new JButton("Restart Game");
+        generatePuzzleButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generateSudokuPuzzle();
+            }
+        });
+        buttonPanel.add(generatePuzzleButton);
+
+
+        Container container = getContentPane();
+        sudokuGrid.getGridPanel().setBackground(Color.BLUE);
+        container.setLayout(new BorderLayout());
+        container.add(sudokuGrid.getGridPanel(), BorderLayout.CENTER);
+        container.add(buttonPanel, BorderLayout.SOUTH);
+
+        pack();
+        setLocationRelativeTo(null);
+        generateSudokuPuzzle();
+    }
+
+    private void goBackToStartScreen()
+    {
+        this.setVisible(false);
+        StartScreen startScreen = new StartScreen();
+        startScreen.setVisible(true);
+        dispose();
+    }
+
+    private void resetBoard() {
+        JTextField[][] cells = sudokuGrid.getCells();
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                cells[row][col].setText("");
+            }
+        }
+    }
+
+    private void generateSudokuPuzzle() {
+        SudokuGenerator generator = new SudokuGenerator(boardSize);
+        solvedpuzzle = generator.generatePuzzle();
+        resetBoard(); // Clear the board
+        populateBoard(solvedpuzzle, boardSize); // Populate the board with the solution
+        removeNumbersFromBoard();
+    }
+
+    private void populateBoard(int[][] puzzle, int boardSize) {
+        JTextField[][] cells = sudokuGrid.getCells();
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                int value = puzzle[row][col];
+                if (value != 0) {
+                    cells[row][col].setText(Integer.toString(value));
+                    cells[row][col].setEditable(false);
+                }
+            }
+        }
+    }
+
+    private void removeNumbersFromBoard() {
+        JTextField[][] cells = sudokuGrid.getCells();
+        int cellsToRemove = boardSize * boardSize / 2; // Adjust as needed
+
+        while (cellsToRemove > 0) {
+            int row = (int) (Math.random() * boardSize);
+            int col = (int) (Math.random() * boardSize);
+
+            if (!cells[row][col].getText().isEmpty()) {
+                cells[row][col].setText("");
+                cells[row][col].setEditable(true);
+                cellsToRemove--;
+            }
+        }
+    }
+
+    private boolean isSolutionCorrect(int boardSize) {
+        JTextField[][] cells = sudokuGrid.getCells();
+
+        // Check rows, columns, and subgrids for correctness
+        // Implement the solution correctness checking logic here using the getCell method
+        for (int row = 0; row < boardSize; row++) {
+            Set<String> rowSet = new HashSet<>();
+            Set<String> colSet = new HashSet<>();
+            Set<String> subgridSet = new HashSet<>();
+            int subgridsize = (int) Math.sqrt(boardSize);
+            for (int col = 0; col < boardSize; col++) {
+                String rowCellValue = sudokuGrid.getCell(row, col).getText().trim();
+                String colCellValue = sudokuGrid.getCell(col, row).getText().trim();
+                String subgridCellValue = sudokuGrid.getCell((row / subgridsize) * subgridsize + (col / subgridsize), (row % subgridsize) * subgridsize + (col % subgridsize)).getText().trim();
+
+                if (rowCellValue.isEmpty() || rowSet.contains(rowCellValue)
+                        || colCellValue.isEmpty() || colSet.contains(colCellValue)
+                        || subgridCellValue.isEmpty() || subgridSet.contains(subgridCellValue)
+                        || !isValidCellValue(rowCellValue) || !isValidCellValue(colCellValue) || !isValidCellValue(subgridCellValue)) {
+                    return false; // Invalid row, column, or subgrid
+                }
+                rowSet.add(rowCellValue);
+                colSet.add(colCellValue);
+                subgridSet.add(subgridCellValue);
+            }
+        }
+        return true; // Solution is correct
+    }
+
+    private boolean isValidCellValue(String value) {
+        try {
+            int num = Integer.parseInt(value);
+            return num >= 1 && num <= boardSize;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                StartScreen startScreen = new StartScreen();
+                startScreen.setVisible(true);
+            }
+        });
+    }
+}
