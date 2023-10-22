@@ -9,7 +9,7 @@ public class SudokuBoard extends JFrame {
     private SudokuGrid sudokuGrid;
     private int[][] solvedpuzzle;
 
-    public SudokuBoard(int size) {
+    public SudokuBoard(String mode,int size) {
         boardSize = size;
         sudokuGrid = new SudokuGrid(size);
         solvedpuzzle = new int[boardSize][boardSize];

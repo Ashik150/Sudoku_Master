@@ -4,46 +4,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StartScreen extends JFrame {
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
+
     public StartScreen() {
         setTitle("Sudoku Game");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(400, 200));
 
-        // Set the background color of the content pane
-        getContentPane().setBackground(Color.BLUE);
+        // Set up a card layout to switch between panels
+        cardPanel = new JPanel();
+        cardLayout = new CardLayout();
+        cardPanel.setLayout(cardLayout);
 
-        JPanel panel = new JPanel(new GridBagLayout());
+        // Create the start screen panel
+        JPanel startPanel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JButton newGameButton = new JButton("Start");
-        newGameButton.setBackground(Color.GREEN);
-
-        newGameButton.addActionListener(new ActionListener() {
+        JButton startButton = new JButton("Start");
+        startButton.setBackground(Color.GREEN);
+        startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String sizeInput = JOptionPane.showInputDialog("Enter the Board Size:");
-                int boardsize=4;
-                try{
-                    int size = Integer.parseInt(sizeInput);
-                    double sqrt = Math.sqrt(size);
-                    if(sqrt == (int)sqrt)
-                    {
-                        boardsize = size;
-                    }
-                } catch(Exception ex)
-                {
-                    JOptionPane.showMessageDialog(null,"Invalid Input. Using Default Size (9X9).");
-                }
-                SudokuBoard sudokuBoard = new SudokuBoard(boardsize);
-                sudokuBoard.setVisible(true);
-                dispose();
+                // Switch to the mode selection panel
+                cardLayout.show(cardPanel, "modeSelection");
             }
         });
 
         constraints.insets = new Insets(20, 20, 20, 20);
-        panel.add(newGameButton, constraints);
+        startPanel.add(startButton, constraints);
 
-        add(panel);
+        // Create the mode selection panel
+        ModeSelectionPanel modeSelectionPanel = new ModeSelectionPanel(this);
+
+        cardPanel.add(startPanel, "start");
+        cardPanel.add(modeSelectionPanel, "modeSelection");
+        cardLayout.show(cardPanel, "start");
+
+        add(cardPanel);
         pack();
         setLocationRelativeTo(null);
     }
@@ -56,5 +54,12 @@ public class StartScreen extends JFrame {
                 startScreen.setVisible(true);
             }
         });
+    }
+
+    public void startGame(String mode, int boardSize) {
+        // Start the game with the selected mode and board size
+        SudokuBoard sudokuBoard = new SudokuBoard(mode, boardSize);
+        sudokuBoard.setVisible(true);
+        dispose();
     }
 }
