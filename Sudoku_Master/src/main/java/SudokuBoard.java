@@ -2,21 +2,49 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SudokuBoard extends JFrame {
     private int boardSize;
     private SudokuGrid sudokuGrid;
     private int[][] solvedpuzzle;
+    private Timer timer;
+    private long startTime;
+    private JLabel timerLabel;
+    private int timeLimitInSeconds; // Time limit for the game
 
-    public SudokuBoard(String mode,int size) {
+    public SudokuBoard(String mode, int size) {
         boardSize = size;
         sudokuGrid = new SudokuGrid(size);
         solvedpuzzle = new int[boardSize][boardSize];
 
+        // Initialize the time limit based on the game mode
+        if ("Easy Mode".equals(mode)) {
+            timeLimitInSeconds = 8 * 60; // 8 minutes for easy mode
+        } else if ("Hard Mode".equals(mode)) {
+            timeLimitInSeconds = 5 * 60; // 5 minutes for hard mode
+        } else {
+            timeLimitInSeconds = 0; // No time limit for other modes (e.g., Zen Mode)
+        }
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(500, 500));
         setTitle("Sudoku Master");
+
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTimerDisplay();
+            }
+        });
+
+        Container container1 = getContentPane();
+        container1.setLayout(new BorderLayout());
+
+        timerLabel = new JLabel("Time: 00:00");
+        container1.add(timerLabel, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel();
         JButton solveButton = new JButton("Solution");
@@ -33,7 +61,8 @@ public class SudokuBoard extends JFrame {
         checkSolutionButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean solutionCorrect = isSolutionCorrect(boardSize); // Check solution
+                timer.stop();
+                boolean solutionCorrect = isSolutionCorrect(boardSize);
                 if (solutionCorrect) {
                     JOptionPane.showMessageDialog(null, "Congratulations! Solution is correct.");
                 } else {
@@ -56,25 +85,60 @@ public class SudokuBoard extends JFrame {
         generatePuzzleButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                timer.stop();
+                startTime = System.currentTimeMillis();
+                timer.start();
                 generateSudokuPuzzle();
             }
         });
         buttonPanel.add(generatePuzzleButton);
 
-
-        Container container = getContentPane();
-        sudokuGrid.getGridPanel().setBackground(Color.BLUE);
-        container.setLayout(new BorderLayout());
-        container.add(sudokuGrid.getGridPanel(), BorderLayout.CENTER);
-        container.add(buttonPanel, BorderLayout.SOUTH);
+        container1.add(sudokuGrid.getGridPanel(), BorderLayout.CENTER);
+        container1.add(buttonPanel, BorderLayout.SOUTH);
 
         pack();
         setLocationRelativeTo(null);
         generateSudokuPuzzle();
+
+        startTime = System.currentTimeMillis();
+        timer.start();
     }
 
-    private void goBackToStartScreen()
-    {
+    public void updateTimerDisplay() {
+        if (timeLimitInSeconds > 0) {
+            long currentTime = System.currentTimeMillis();
+            long elapsedTimeInSeconds = (currentTime - startTime) / 1000;
+            long remainingTimeInSeconds = timeLimitInSeconds - elapsedTimeInSeconds;
+
+            if (remainingTimeInSeconds <= 0) {
+                handleTimeUp();
+            }
+            else
+            {
+                long hours = remainingTimeInSeconds / 3600;
+                long minutes = (remainingTimeInSeconds % 3600) / 60;
+                long seconds = remainingTimeInSeconds % 60;
+                String formattedTime = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                timerLabel.setText("Time: " + formattedTime);
+            }
+        }
+    }
+
+    public void handleTimeUp() {
+        // Stop the timer (it might already be stopped, but this ensures it's stopped)
+        timer.stop();
+
+        // Display a message indicating that the player has run out of time
+        JOptionPane.showMessageDialog(null, "Time's up! You ran out of time. Better luck next time!");
+
+        // Reset the board and start a new game
+        resetBoard();
+        generateSudokuPuzzle();
+        startTime = System.currentTimeMillis();
+        timer.start(); // Restart the timer for the new game
+    }
+
+    private void goBackToStartScreen() {
         this.setVisible(false);
         StartScreen startScreen = new StartScreen();
         startScreen.setVisible(true);
@@ -136,16 +200,16 @@ public class SudokuBoard extends JFrame {
             Set<String> rowSet = new HashSet<>();
             Set<String> colSet = new HashSet<>();
             Set<String> subgridSet = new HashSet<>();
-            int subgridsize = (int) Math.sqrt(boardSize);
+            int subgridSize = (int) Math.sqrt(boardSize);
             for (int col = 0; col < boardSize; col++) {
-                String rowCellValue = sudokuGrid.getCell(row, col).getText().trim();
-                String colCellValue = sudokuGrid.getCell(col, row).getText().trim();
-                String subgridCellValue = sudokuGrid.getCell((row / subgridsize) * subgridsize + (col / subgridsize), (row % subgridsize) * subgridsize + (col % subgridsize)).getText().trim();
+                String rowCellValue = cells[row][col].getText().trim();
+                String colCellValue = cells[col][row].getText().trim();
+                String subgridCellValue = cells[(row / subgridSize) * subgridSize + (col / subgridSize)][(row % subgridSize) * subgridSize + (col % subgridSize)].getText().trim();
 
-                if (rowCellValue.isEmpty() || rowSet.contains(rowCellValue)
-                        || colCellValue.isEmpty() || colSet.contains(colCellValue)
-                        || subgridCellValue.isEmpty() || subgridSet.contains(subgridCellValue)
-                        || !isValidCellValue(rowCellValue) || !isValidCellValue(colCellValue) || !isValidCellValue(subgridCellValue)) {
+                if (rowCellValue.isEmpty() || rowSet.contains(rowCellValue) ||
+                        colCellValue.isEmpty() || colSet.contains(colCellValue) ||
+                        subgridCellValue.isEmpty() || subgridSet.contains(subgridCellValue) ||
+                        !isValidCellValue(rowCellValue) || !isValidCellValue(colCellValue) || !isValidCellValue(subgridCellValue)) {
                     return false; // Invalid row, column, or subgrid
                 }
                 rowSet.add(rowCellValue);
