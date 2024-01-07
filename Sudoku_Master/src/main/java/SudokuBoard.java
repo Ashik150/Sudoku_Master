@@ -8,15 +8,20 @@ import java.util.Set;
 
 public class SudokuBoard extends JFrame {
     private int boardSize;
+
+    private String mode;
+    private int hintCounter;
     private SudokuGrid sudokuGrid;
     private int[][] solvedpuzzle;
     private Timer timer;
     private long startTime;
     private JLabel timerLabel;
-    private int timeLimitInSeconds; // Time limit for the game
+    private int timeLimitInSeconds;
+    private JLabel hintCounterLabel;// Time limit for the game
 
     public SudokuBoard(String mode, int size) {
         boardSize = size;
+        this.mode = mode;
         sudokuGrid = new SudokuGrid(size);
         solvedpuzzle = new int[boardSize][boardSize];
 
@@ -30,7 +35,7 @@ public class SudokuBoard extends JFrame {
         }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(500, 500));
+        setPreferredSize(new Dimension(550, 500));
         setTitle("Sudoku Master");
 
         timer = new Timer(1000, new ActionListener() {
@@ -92,6 +97,26 @@ public class SudokuBoard extends JFrame {
             }
         });
         buttonPanel.add(generatePuzzleButton);
+        hintCounterLabel = new JLabel("Hints remaining: " + hintCounter);
+        JButton hintButton = new JButton("Hint");
+        hintButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                provideHint();
+            }
+        });
+        buttonPanel.add(hintButton);
+        buttonPanel.add(hintCounterLabel);
+
+        if ("Zen Mode".equals(mode)) {
+            hintCounter = 3;
+        } else if ("Easy Mode".equals(mode)) {
+            hintCounter = 2;
+        } else if ("Hard Mode".equals(mode)) {
+            hintCounter = 1;
+        }
+
+
 
         container1.add(sudokuGrid.getGridPanel(), BorderLayout.CENTER);
         container1.add(buttonPanel, BorderLayout.SOUTH);
@@ -99,6 +124,7 @@ public class SudokuBoard extends JFrame {
         pack();
         setLocationRelativeTo(null);
         generateSudokuPuzzle();
+
 
         startTime = System.currentTimeMillis();
         timer.start();
@@ -144,7 +170,17 @@ public class SudokuBoard extends JFrame {
         startScreen.setVisible(true);
         dispose();
     }
-
+    private void resetHintCounter() {
+        // Reset the hint counter based on the game mode
+        if ("Zen Mode".equals(mode)) {
+            hintCounter = 3;
+        } else if ("Easy Mode".equals(mode)) {
+            hintCounter = 2;
+        } else if ("Hard Mode".equals(mode)) {
+            hintCounter = 1;
+        }
+        updateHintCounterLabel();
+    }
     private void resetBoard() {
         JTextField[][] cells = sudokuGrid.getCells();
         for (int row = 0; row < boardSize; row++) {
@@ -158,6 +194,7 @@ public class SudokuBoard extends JFrame {
         SudokuGenerator generator = new SudokuGenerator(boardSize);
         solvedpuzzle = generator.generatePuzzle();
         resetBoard(); // Clear the board
+        resetHintCounter();
         populateBoard(solvedpuzzle, boardSize); // Populate the board with the solution
         removeNumbersFromBoard();
     }
@@ -227,6 +264,54 @@ public class SudokuBoard extends JFrame {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+    private void provideHint() {
+        if (hintCounter > 0) {
+            // Randomly select an empty cell and fill it with the correct value from the solution
+            JTextField[][] cells = sudokuGrid.getCells();
+            int emptyCells = getEmptyCellsCount(cells);
+
+            if (emptyCells > 0) {
+                int randomEmptyIndex = (int) (Math.random() * emptyCells);
+                int count = 0;
+
+                for (int row = 0; row < boardSize; row++) {
+                    for (int col = 0; col < boardSize; col++) {
+                        if (cells[row][col].getText().isEmpty()) {
+                            if (count == randomEmptyIndex) {
+                                // Set the hint value from the solution
+                                cells[row][col].setText(Integer.toString(solvedpuzzle[row][col]));
+                                cells[row][col].setEditable(false);
+                                hintCounter--;
+
+                                // Update the hint counter display if needed
+                                // (you can add a JLabel or another GUI element to display the remaining hints)
+                                // hintCounterLabel.setText("Hints remaining: " + hintCounter);
+                                updateHintCounterLabel();
+                                return;
+                            }
+                            count++;
+                        }
+                    }
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No more hints available.");
+        }
+    }
+    private void updateHintCounterLabel() {
+        hintCounterLabel.setText("Hints remaining: " + hintCounter);
+    }
+    private int getEmptyCellsCount(JTextField[][] cells) {
+        int count = 0;
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                if (cells[row][col].getText().isEmpty()) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {
