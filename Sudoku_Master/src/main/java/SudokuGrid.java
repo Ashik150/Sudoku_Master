@@ -1,3 +1,5 @@
+package Sudoku_Master.src.main.java;
+
 import java.awt.*;
 import javax.swing.*;
 public class SudokuGrid
