@@ -48,7 +48,9 @@ public class UserRegistration extends JPanel {
         if (!username.isEmpty() && !password.isEmpty()) {
             if (createUser(username, password)) {
                 JOptionPane.showMessageDialog(this, "User registration successful!");
-                startScreen.switchToRegistrationPanel();
+
+                // Switch to the login panel after successful registration
+                startScreen.switchToLoginPanel();
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to register user. Please try again.");
             }
@@ -59,6 +61,7 @@ public class UserRegistration extends JPanel {
 
     private boolean createUser(String username, String password) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("user_accounts.txt", true))) {
+            // Append user credentials to a text file (for simplicity; in practice, consider secure storage)
             writer.write(username + ";" + password + "\n");
             return true;
         } catch (IOException e) {

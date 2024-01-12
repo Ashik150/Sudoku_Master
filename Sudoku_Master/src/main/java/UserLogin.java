@@ -17,7 +17,7 @@ public class UserLogin extends JPanel {
     public UserLogin(StartScreen startScreen) {
         this.startScreen = startScreen;
 
-        setLayout(new GridLayout(3, 2, 10, 10));
+        setLayout(new GridLayout(4, 2, 10, 10));
 
         JLabel usernameLabel = new JLabel("Username:");
         usernameField = new JTextField();
@@ -33,12 +33,23 @@ public class UserLogin extends JPanel {
             }
         });
 
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Switch back to the registration panel
+                startScreen.switchToRegistrationPanel();
+            }
+        });
+
         add(usernameLabel);
         add(usernameField);
         add(passwordLabel);
         add(passwordField);
         add(new JLabel()); // Placeholder
         add(loginButton);
+        add(new JLabel()); // Placeholder
+        add(backButton);
     }
 
     private void loginUser() {
@@ -49,7 +60,7 @@ public class UserLogin extends JPanel {
             if (checkUserCredentials(username, password)) {
                 JOptionPane.showMessageDialog(this, "Login successful!");
 
-                // Added comment: Switch to main menu panel in StartScreen
+                // Switch to the main menu panel after successful login
                 startScreen.switchToMainMenuPanel(username);
             } else {
                 JOptionPane.showMessageDialog(this, "Invalid username or password. Please try again.");
