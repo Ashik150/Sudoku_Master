@@ -42,12 +42,25 @@ public class ModeSelectionPanel extends JPanel {
                 parent.startGame("Hard Mode", boardSize);
             }
         });
+        JButton personalChallengeButton = new JButton("Personal Challenge");
+        personalChallengeButton.setBackground(Color.CYAN);
+        personalChallengeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int boardSize = promptForBoardSize();
+                int timeLimit = promptForTimeLimit(); // Prompt user for time limit
+                parent.startGame("Personal Challenge", boardSize, timeLimit);
+            }
+        });
+
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.add(zenModeButton);
         buttonPanel.add(easyModeButton);
         buttonPanel.add(hardModeButton);
+        buttonPanel.add(personalChallengeButton);
+
 
         add(buttonPanel, BorderLayout.CENTER);
     }
@@ -66,6 +79,17 @@ public class ModeSelectionPanel extends JPanel {
         }
         return boardSize;
     }
+    private int promptForTimeLimit() {
+        String timeLimitInput = JOptionPane.showInputDialog("Enter the Time Limit (in minutes) for Personal Challenge:");
+        int timeLimit = 4; // Default time limit
+        try {
+            timeLimit = Integer.parseInt(timeLimitInput);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Invalid Input. Using Default Time Limit (10 minutes).");
+        }
+        return timeLimit;
+    }
+
 }
 
 

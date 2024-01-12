@@ -56,10 +56,12 @@ public class StartScreen extends JFrame {
         });
     }
 
-    public void startGame(String mode, int boardSize) {
+    public void startGame(String mode, int boardSize, int... extraParameters) {
         // Start the game with the selected mode and board size
-        SudokuBoard sudokuBoard = new SudokuBoard(mode, boardSize);
+        SudokuBoard sudokuBoard = new SudokuBoard(mode, boardSize, extraParameters);
         sudokuBoard.setVisible(true);
         dispose();
     }
+
+
 }

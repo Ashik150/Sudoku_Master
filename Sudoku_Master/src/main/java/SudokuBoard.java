@@ -19,20 +19,39 @@ public class SudokuBoard extends JFrame {
     private int timeLimitInSeconds;
     private JLabel hintCounterLabel;// Time limit for the game
 
-    public SudokuBoard(String mode, int size) {
+    public SudokuBoard(String mode, int size,int... extraParameters) {
         boardSize = size;
         this.mode = mode;
         sudokuGrid = new SudokuGrid(size);
         solvedpuzzle = new int[boardSize][boardSize];
-
-        // Initialize the time limit based on the game mode
-        if ("Easy Mode".equals(mode)) {
-            timeLimitInSeconds = 8 * 60; // 8 minutes for easy mode
-        } else if ("Hard Mode".equals(mode)) {
-            timeLimitInSeconds = 5 * 60; // 5 minutes for hard mode
+        if ("Personal Challenge".equals(mode)) {
+            // Handle Personal Challenge mode with time limit
+            if (extraParameters.length > 0) {
+                timeLimitInSeconds = extraParameters[0] * 60; // Convert minutes to seconds
+            } else {
+                timeLimitInSeconds = 10 * 60; // Default time limit for Personal Challenge mode
+            }
         } else {
-            timeLimitInSeconds = 0; // No time limit for other modes (e.g., Zen Mode)
+            // Handle other modes
+            if ("Easy Mode".equals(mode)) {
+                timeLimitInSeconds = 8 * 60; // 8 minutes for easy mode
+            } else if ("Hard Mode".equals(mode)) {
+                timeLimitInSeconds = 5 * 60; // 5 minutes for hard mode
+            } else {
+                timeLimitInSeconds = 0; // No time limit for other modes (e.g., Zen Mode)
+            }
         }
+
+
+            // Initialize the time limit based on the game mode
+//            if ("Easy Mode".equals(mode)) {
+//                timeLimitInSeconds = 8 * 60; // 8 minutes for easy mode
+//            } else if ("Hard Mode".equals(mode)) {
+//                timeLimitInSeconds = 5 * 60; // 5 minutes for hard mode
+//            } else {
+//                timeLimitInSeconds = 0; // No time limit for other modes (e.g., Zen Mode)
+//            }
+
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(550, 500));
@@ -198,6 +217,7 @@ public class SudokuBoard extends JFrame {
         populateBoard(solvedpuzzle, boardSize); // Populate the board with the solution
         removeNumbersFromBoard();
     }
+
 
     private void populateBoard(int[][] puzzle, int boardSize) {
         JTextField[][] cells = sudokuGrid.getCells();
