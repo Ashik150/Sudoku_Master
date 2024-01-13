@@ -1,5 +1,6 @@
 package Sudoku_Master.src.main.java;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,7 +9,9 @@ import java.awt.event.ActionListener;
 public class StartScreen extends JFrame {
     private JPanel cardPanel;
     private CardLayout cardLayout;
-    private UserRegistration userRegistrationPanel; // Declare the UserRegistration panel
+    private UserRegistration userRegistrationPanel;
+    private UserLogin userLoginPanel;
+    private JPanel mainMenuPanel; // Placeholder for main menu
 
     public StartScreen() {
         setTitle("Sudoku Game");
@@ -20,12 +23,78 @@ public class StartScreen extends JFrame {
         cardLayout = new CardLayout();
         cardPanel.setLayout(cardLayout);
 
+        // Create the registration panel
+        userRegistrationPanel = new UserRegistration(this);
+
+        // Create the login panel
+        userLoginPanel = new UserLogin(this);
+
+        ModeSelectionPanel modeSelectionPanel = new ModeSelectionPanel(this);
+
+        // Create the main menu panel (placeholder)
+        mainMenuPanel = new JPanel();
+        mainMenuPanel.setLayout(new BorderLayout());
+        mainMenuPanel.add(new JLabel("Welcome to the Main Menu!"), BorderLayout.CENTER);
+
         // Create the start screen panel
         JPanel startPanel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
 
+        JButton registerButton = new JButton("Register");
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Switch to the registration panel
+                switchToRegistrationPanel();
+            }
+        });
+
+        JButton loginButton = new JButton("Login");
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Switch to the login panel
+                switchToLoginPanel();
+            }
+        });
+
+        constraints.insets = new Insets(20, 20, 20, 20);
+        startPanel.add(registerButton, constraints);
+        startPanel.add(loginButton, constraints);
+
+        cardPanel.add(startPanel, "start");
+        cardPanel.add(userRegistrationPanel, "userRegistration");
+        cardPanel.add(userLoginPanel, "userLogin");
+        cardPanel.add(mainMenuPanel, "mainMenu");
+        cardPanel.add(modeSelectionPanel, "modeSelection");
+
+        cardLayout.show(cardPanel, "start");
+
+        add(cardPanel);
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    public void switchToRegistrationPanel() {
+        cardLayout.show(cardPanel, "userRegistration");
+    }
+
+    public void switchToLoginPanel() {
+        cardLayout.show(cardPanel, "userLogin");
+    }
+
+    //    public void switchToMainMenuPanel(String username) {
+//        // Modify this method as needed based on your actual main menu requirements
+//        JLabel welcomeLabel = new JLabel("Welcome, " + username + "!");
+////        mainMenuPanel.removeAll();
+////        mainMenuPanel.add(welcomeLabel, BorderLayout.CENTER);
+////        cardLayout.show(cardPanel, "mainMenu");
+//    }
+    public void switchToMainMenuPanel(String username) {
+        // Modify this method as needed based on your actual main menu requirements
+        JLabel welcomeLabel = new JLabel("Welcome, " + username + "!");
+
         JButton startButton = new JButton("Start");
-        startButton.setBackground(Color.GREEN);
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -33,33 +102,12 @@ public class StartScreen extends JFrame {
                 cardLayout.show(cardPanel, "modeSelection");
             }
         });
-        JButton registerButton = new JButton("Register");
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Switch to the user registration panel
-                cardLayout.show(cardPanel, "userRegistration");
-            }
-        });
 
-        constraints.insets = new Insets(20, 20, 20, 20);
-        startPanel.add(startButton, constraints);
-        startPanel.add(registerButton, constraints);
-        // Create the mode selection panel
-        ModeSelectionPanel modeSelectionPanel = new ModeSelectionPanel(this);
-        // Create the user registration panel and pass the reference to StartScreen
-        userRegistrationPanel = new UserRegistration(this);
-
-
-
-        cardPanel.add(startPanel, "start");
-        cardPanel.add(modeSelectionPanel, "modeSelection");
-        cardPanel.add(userRegistrationPanel, "userRegistration");
-        cardLayout.show(cardPanel, "start");
-
-        add(cardPanel);
-        pack();
-        setLocationRelativeTo(null);
+        mainMenuPanel.removeAll();
+        mainMenuPanel.setLayout(new BorderLayout());
+        mainMenuPanel.add(welcomeLabel, BorderLayout.NORTH);
+        mainMenuPanel.add(startButton, BorderLayout.CENTER);
+        cardLayout.show(cardPanel, "mainMenu");
     }
 
     public static void main(String[] args) {
@@ -77,11 +125,5 @@ public class StartScreen extends JFrame {
         SudokuBoard sudokuBoard = new SudokuBoard(mode, boardSize, extraParameters);
         sudokuBoard.setVisible(true);
         dispose();
-    }
-
-    // Method to switch to the registration panel after successful registration
-    public void switchToRegistrationPanel() {
-        cardLayout.show(cardPanel, "userRegistration");
-        //userRegistrationPanel.clearFields(); // Optional: clear fields in the registration panel
     }
 }
