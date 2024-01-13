@@ -26,7 +26,7 @@ public class ModeSelectionPanel extends JPanel {
         easyModeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int boardSize = promptForBoardSize();
+                int boardSize = 9;
                 // Start the game with Easy Mode and the selected board size
                 parent.startGame("Easy Mode", boardSize);
             }
@@ -37,7 +37,7 @@ public class ModeSelectionPanel extends JPanel {
         hardModeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int boardSize = promptForBoardSize();
+                int boardSize = 16;
                 // Start the game with Hard Mode and the selected board size
                 parent.startGame("Hard Mode", boardSize);
             }
