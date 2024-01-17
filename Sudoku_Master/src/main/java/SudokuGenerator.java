@@ -1,4 +1,4 @@
-package Sudoku_Master.src.main.java;
+package src.main.java;
 
 import java.util.Arrays;
 import java.util.Collections;

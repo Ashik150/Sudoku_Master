@@ -1,4 +1,4 @@
-package Sudoku_Master.src.main.java;
+package src.main.java;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

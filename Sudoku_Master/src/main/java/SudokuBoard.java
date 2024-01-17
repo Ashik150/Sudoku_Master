@@ -1,4 +1,4 @@
-package Sudoku_Master.src.main.java;
+package src.main.java;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,7 +102,7 @@ public class SudokuBoard extends JFrame {
         back.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                goBackToStartScreen();
+                goBackToModeSelectionPanel();
             }
         });
         buttonPanel.add(back);
@@ -185,12 +185,27 @@ public class SudokuBoard extends JFrame {
         timer.start(); // Restart the timer for the new game
     }
 
-    private void goBackToStartScreen() {
+//    private void goBackToStartScreen() {
+//        this.setVisible(false);
+//        StartScreen startScreen = new StartScreen();
+//        startScreen.setVisible(true);
+//        dispose();
+//    }
+
+    private void goBackToModeSelectionPanel() {
         this.setVisible(false);
+
+        // Retrieve the parent StartScreen
         StartScreen startScreen = new StartScreen();
+
+        // Switch to the mode selection panel
+        startScreen.getCardLayout().show(startScreen.getCardPanel(), "modeSelection");
+
         startScreen.setVisible(true);
         dispose();
     }
+
+
     private void resetHintCounter() {
         // Reset the hint counter based on the game mode
         if ("Zen Mode".equals(mode)) {

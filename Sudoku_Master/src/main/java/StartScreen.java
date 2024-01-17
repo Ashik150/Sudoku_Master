@@ -1,4 +1,4 @@
-package Sudoku_Master.src.main.java;
+package src.main.java;
 
 
 import javax.swing.*;
@@ -125,5 +125,15 @@ public class StartScreen extends JFrame {
         SudokuBoard sudokuBoard = new SudokuBoard(mode, boardSize, extraParameters);
         sudokuBoard.setVisible(true);
         dispose();
+    }
+
+    public CardLayout getCardLayout()
+    {
+        return cardLayout;
+    }
+
+    public JPanel getCardPanel()
+    {
+        return cardPanel;
     }
 }
