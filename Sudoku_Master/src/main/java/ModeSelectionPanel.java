@@ -10,7 +10,7 @@ public class ModeSelectionPanel extends JPanel {
 
     public ModeSelectionPanel(StartScreen parent) {
         this.parent = parent;
-        setLayout(new FlowLayout(FlowLayout.CENTER,100,40));
+        setLayout(new FlowLayout(FlowLayout.CENTER,100,25));
 
         JButton zenModeButton = new JButton("Zen Mode");
         zenModeButton.setBackground(Color.CYAN);
@@ -55,6 +55,14 @@ public class ModeSelectionPanel extends JPanel {
             }
         });
 
+        JButton logoutButton = new JButton("Logout");
+        logoutButton.setBackground(Color.CYAN);
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logout();
+            }
+        });
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -62,7 +70,7 @@ public class ModeSelectionPanel extends JPanel {
         buttonPanel.add(easyModeButton);
         buttonPanel.add(hardModeButton);
         buttonPanel.add(personalChallengeButton);
-
+        buttonPanel.add(logoutButton);
 
         add(buttonPanel, BorderLayout.CENTER);
     }
@@ -92,6 +100,13 @@ public class ModeSelectionPanel extends JPanel {
         return timeLimit;
     }
 
+    public void logout() {
+        // Retrieve the parent StartScreen
+        StartScreen startScreen = parent;
+
+        // Switch to the start panel
+        startScreen.getCardLayout().show(startScreen.getCardPanel(), "start");
+    }
 }
 
 
