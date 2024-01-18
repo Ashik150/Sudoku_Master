@@ -29,9 +29,9 @@ public class SudokuBoard extends JFrame {
         if ("Personal Challenge".equals(mode)) {
             // Handle Personal Challenge mode with time limit
             if (extraParameters.length > 0) {
-                timeLimitInSeconds = extraParameters[0] * 60; // Convert minutes to seconds
+                timeLimitInSeconds = extraParameters[0] ; // Convert minutes to seconds
             } else {
-                timeLimitInSeconds = 10 * 60; // Default time limit for Personal Challenge mode
+                timeLimitInSeconds = 4; // Default time limit for Personal Challenge mode
             }
         } else {
             // Handle other modes
@@ -176,7 +176,11 @@ public class SudokuBoard extends JFrame {
         timer.stop();
 
         // Display a message indicating that the player has run out of time
-        JOptionPane.showMessageDialog(null, "Time's up! You ran out of time. Better luck next time!");
+        if ("Personal Challenge".equals(mode)) {
+            JOptionPane.showMessageDialog(null, "Time's up! You ran out of time. Better luck next time!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Time's up! Better luck next time!");
+        }
 
         // Reset the board and start a new game
         resetBoard();
@@ -193,6 +197,7 @@ public class SudokuBoard extends JFrame {
 //    }
 
     private void goBackToModeSelectionPanel() {
+        timer.stop();
         this.setVisible(false);
 
         // Retrieve the parent StartScreen

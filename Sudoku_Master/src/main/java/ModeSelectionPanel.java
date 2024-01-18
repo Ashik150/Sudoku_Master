@@ -90,12 +90,12 @@ public class ModeSelectionPanel extends JPanel {
         return boardSize;
     }
     private int promptForTimeLimit() {
-        String timeLimitInput = JOptionPane.showInputDialog("Enter the Time Limit (in minutes) for Personal Challenge:");
+        String timeLimitInput = JOptionPane.showInputDialog("Enter the Time Limit (in seconds) for Personal Challenge:");
         int timeLimit = 4; // Default time limit
         try {
             timeLimit = Integer.parseInt(timeLimitInput);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Invalid Input. Using Default Time Limit (10 minutes).");
+            JOptionPane.showMessageDialog(null, "Invalid Input. Using Default Time Limit (4 minutes).");
         }
         return timeLimit;
     }
