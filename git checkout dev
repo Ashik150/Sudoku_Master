@@ -1,0 +1,98 @@
+[33mcommit 3580324cc63d6779faa1820be67abfede82397c4[m[33m ([m[1;36mHEAD -> [m[1;32mhintsystem-ayon[m[33m, [m[1;31morigin/hintsystem-ayon[m[33m)[m
+Author: Ayonspoiler <ayon4052@gmail.com>
+Date:   Thu Jan 4 03:36:48 2024 +0600
+
+    HintSystem Implemented.
+
+[33mcommit 44be06c7a4383f2f5db784a4361297cc9fe26818[m
+Merge: 925a811 2aad63e
+Author: Shahriar Ashik <123257380+Ashik150@users.noreply.github.com>
+Date:   Tue Oct 24 16:11:41 2023 +0600
+
+    Merge pull request #3 from Ashik150/HardMode
+    
+    Updated Sudoku timer and Sudoku Board
+
+[33mcommit 2aad63e7c67bd8a7d3e08495c6c42933bb5c09a2[m[33m ([m[1;31morigin/HardMode[m[33m)[m
+Author: Ekramul Esham <112435061+EshaAam@users.noreply.github.com>
+Date:   Tue Oct 24 14:02:10 2023 +0600
+
+    Updated Sudoku timer and Sudoku Board
+
+[33mcommit 925a811c1bda5c5f6503077809c66c8e9adc8fdf[m
+Merge: 31c4c85 f755173
+Author: Shahriar Ashik <123257380+Ashik150@users.noreply.github.com>
+Date:   Mon Oct 23 00:16:26 2023 +0600
+
+    Merge pull request #2 from Ashik150/zenmode-ashik
+    
+    Zenmode ashik to dev
+
+[33mcommit f755173f05cb68349177676c61ec3f9e44e645f2[m[33m ([m[1;31morigin/zenmode-ashik[m[33m)[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Mon Oct 23 00:04:45 2023 +0600
+
+    Add mode system
+
+[33mcommit 1ad4239b5c76e1d21eb281f1249765fa36287d1f[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Mon Oct 23 00:04:28 2023 +0600
+
+    StartScreen modification for mode
+
+[33mcommit d6d1d0a67ca55ca1f1a669a6d41790c7b3016c22[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Mon Oct 23 00:03:59 2023 +0600
+
+    SudokuSolver constructor modification for mode
+
+[33mcommit 31c4c859a49d1531d24b4c8c4735aa0197fb251c[m
+Merge: 7beb9fb 86dee19
+Author: Shahriar Ashik <123257380+Ashik150@users.noreply.github.com>
+Date:   Sat Oct 21 10:12:43 2023 +0600
+
+    Merge pull request #1 from Ashik150/zenmode-ashik
+    
+    Zenmode ashik
+
+[33mcommit 86dee197743559081fb84c368e78552ff6589b47[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Sat Oct 21 09:36:00 2023 +0600
+
+    Zenmode Block Fourth Commit Done by Ashik
+
+[33mcommit d7034ec46f4e4626ce0c01c109758e0659e3f39e[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Wed Oct 18 21:34:31 2023 +0600
+
+    Basic Zenmode Block Third Commit Done by Ashik
+
+[33mcommit 63fe0cff3689b072e05cbc270b33e9e5a9e79b9e[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Sun Oct 15 13:19:01 2023 +0600
+
+    Basic Zenmode Block First Commit
+
+[33mcommit effdeddf3c3eff595b590458544825f2a8c036bc[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Thu Sep 28 20:00:23 2023 +0600
+
+    Basic Zenmode Block First Commit
+
+[33mcommit 22ef45a59f1c3dbc283d081fae9150c9c13aa4c1[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Mon Sep 25 23:56:01 2023 +0600
+
+    first commit
+
+[33mcommit 051cd316e9afa53835708632b80d10b087b7ee37[m
+Author: Ashik150 <sskhan4409@gmail.com>
+Date:   Mon Sep 25 23:24:33 2023 +0600
+
+    Project Created
+
+[33mcommit 7beb9fb0f5fcf9ab1c4473d5f46274d4f19cd95c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Shahriar Ashik <123257380+Ashik150@users.noreply.github.com>
+Date:   Mon Sep 25 22:52:41 2023 +0600
+
+    Initial commit
